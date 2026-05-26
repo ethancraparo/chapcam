@@ -207,9 +207,19 @@ async function openFeed() {
     return;
   }
 
-  grid.innerHTML = '';
   const mySession = getSessionId();
-  data.forEach(file => {
+  const myPhotos = data.filter(file => {
+    const parts = file.name.split('-');
+    return parts.length >= 3 && parts[1] === mySession;
+  });
+
+  if (!myPhotos.length) {
+    grid.innerHTML = '<p class="empty-state">No photos yet.<br>Go take some! 📷</p>';
+    return;
+  }
+
+  grid.innerHTML = '';
+  myPhotos.forEach(file => {
     grid.appendChild(makePolaroid(file, mySession, false));
   });
 }
